@@ -10,6 +10,14 @@ import { CATEGORY_STYLES, CategoryKey } from './constants';
 import SkillCard from './SkillCard';
 import SkillModal from './SkillModal';
 
+/**
+ * Skills section displaying categorized technical skills.
+ *
+ * Supports two data loading strategies:
+ * 1. SSR hydration — receives `initialSkills` from server-fetched props.
+ * 2. Client fallback — if `initialSkills` is absent, fetches directly
+ *    from Firestore on mount (handles edge cases like ISR cache misses).
+ */
 const SkillsSection = ({ initialSkills }: { initialSkills?: Skill[] }) => {
     const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
     const [fetchedSkills, setFetchedSkills] = useState<Skill[]>(initialSkills || []);

@@ -6,8 +6,8 @@ import { trackEvent } from '../lib/analytics';
 
 const navItems = [
     { name: 'Home', href: '#home' },
-    { name: 'Expertise', href: '#skills' },
-    { name: 'Process', href: '#process' },
+    { name: 'Skills', href: '#skills' },
+    { name: 'Experience', href: '#experience' },
     { name: 'Contact', href: '#contact' },
 ];
 
@@ -21,7 +21,7 @@ const NavBar = () => {
             setIsScrolled(window.scrollY > 50);
 
             // Simple active section detection
-            const sections = ['home', 'skills', 'process', 'contact'];
+            const sections = ['home', 'skills', 'experience', 'contact'];
             for (const section of sections) {
                 const element = document.getElementById(section);
                 if (element) {
@@ -38,6 +38,11 @@ const NavBar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    /**
+     * Handles navigation link clicks with analytics tracking.
+     * Closes mobile menu first, then scrolls after a 100ms delay
+     * to prevent the menu's DOM removal from interrupting the scroll gesture.
+     */
     const handleNavClick = (name: string, href: string) => {
         trackEvent('nav_click', { section: name });
 

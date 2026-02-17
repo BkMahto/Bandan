@@ -8,6 +8,11 @@ const ContactSection = () => {
 	const [isResumeOpen, setIsResumeOpen] = useState(false);
 	const resumeUrl = '/Bandan_Kumar_Mahto_Resume.pdf';
 
+	/**
+	 * Opens resume based on device capability.
+	 * Mobile devices and browsers without native PDF viewers open the file
+	 * in a new tab; desktop browsers with PDF support show an in-app modal.
+	 */
 	const handleResumeClick = () => {
 		// Detection logic for PDF support
 		const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);

@@ -7,6 +7,12 @@ interface ResumeModalProps {
     resumeUrl: string;
 }
 
+/**
+ * Full-screen PDF resume preview modal.
+ * Uses `<object>` to embed the PDF inline on desktop.
+ * Falls back to a download button on mobile or if native PDF viewer is unavailable.
+ * Controlled externally via `isOpen` / `onClose` props.
+ */
 const ResumeModal = ({ isOpen, onClose, resumeUrl }: ResumeModalProps) => {
     return (
         <AnimatePresence>

@@ -63,6 +63,12 @@ const projects: Project[] = [
 	},
 ];
 
+/**
+ * Project showcase section categorized by type:
+ * - major: Architectural Highlights (professional apps)
+ * - maintenance: Legacy Evolution (refactoring work)
+ * - personal: Creative Lab (side projects with detail modal)
+ */
 const AppShowcase = () => {
 	const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 

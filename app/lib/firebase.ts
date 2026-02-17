@@ -1,3 +1,11 @@
+/**
+ * Firebase Configuration & Initialization
+ *
+ * Singleton initialization for Firebase services used across the app:
+ * - Firestore (`db`) — Profile data (hero stats, skills)
+ * - Realtime Database (`rtdb`) — Visitor analytics & event logging
+ * - Analytics — Page view & interaction tracking (browser-only)
+ */
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAnalytics, isSupported, logEvent } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";

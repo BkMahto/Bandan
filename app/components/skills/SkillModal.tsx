@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Skill } from '../../lib/services/profile';
 import { CATEGORY_STYLES } from './constants';
@@ -9,8 +9,18 @@ interface SkillModalProps {
     onClose: () => void;
 }
 
+/**
+ * Skill detail modal with description, Google Search link, and optional docs link.
+ * Constructs a search query using `searchSuffix` if available, otherwise falls back
+ * to the skill's tag for context. Locks body scroll while open.
+ */
 const SkillModal = ({ skill, onClose }: SkillModalProps) => {
     const style = CATEGORY_STYLES[skill.category as keyof typeof CATEGORY_STYLES];
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => { document.body.style.overflow = ''; };
+    }, []);
     const searchTerms = skill.searchSuffix ? `${skill.name} ${skill.searchSuffix}` : `${skill.name} ${skill.tag}`;
     const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchTerms)}`;
 
