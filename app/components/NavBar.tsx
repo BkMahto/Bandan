@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent } from '../lib/analytics';
 
@@ -15,10 +15,21 @@ const NavBar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const isClickScrolling = useRef(false);
 
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50);
+
+            // Skip scroll-based detection while a nav click scroll is in progress
+            if (isClickScrolling.current) return;
+
+            // If near bottom of page, force 'contact' active (section is too short to trigger normally)
+            const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
+            if (nearBottom) {
+                setActiveSection('contact');
+                return;
+            }
 
             // Simple active section detection
             const sections = ['home', 'skills', 'experience', 'contact'];
@@ -40,11 +51,18 @@ const NavBar = () => {
 
     /**
      * Handles navigation link clicks with analytics tracking.
-     * Closes mobile menu first, then scrolls after a 100ms delay
-     * to prevent the menu's DOM removal from interrupting the scroll gesture.
+     * Sets active section immediately, then closes mobile menu and scrolls
+     * after a 100ms delay to prevent DOM removal from interrupting the scroll gesture.
      */
     const handleNavClick = (name: string, href: string) => {
         trackEvent('nav_click', { section: name });
+
+        const id = href.replace('#', '');
+
+        // Set active section immediately and suppress scroll detection
+        // so it doesn't override during smooth-scroll animation
+        setActiveSection(id);
+        isClickScrolling.current = true;
 
         // 1. Close mobile menu first if open
         if (isMobileMenuOpen) {
@@ -52,13 +70,13 @@ const NavBar = () => {
         }
 
         // 2. Perform scroll after a tiny delay to let the menu closing animation start/finish
-        // This prevents the DOM removal of the menu from interrupting the scroll gesture
         setTimeout(() => {
-            const id = href.replace('#', '');
             const element = document.getElementById(id);
             if (element) {
                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+            // Re-enable scroll detection after animation settles
+            setTimeout(() => { isClickScrolling.current = false; }, 800);
         }, 100);
     };
 
